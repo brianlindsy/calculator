@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { BackHandler } from "react-native"
 import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native"
 
@@ -84,44 +84,4 @@ export function useBackButtonHandler(
     // Unsubscribe when we're done
     return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
   }, [ref])
-}
-
-/**
- * Custom hook for persisting navigation state.
- */
-export function useNavigationPersistence(storage: any, persistenceKey: string) {
-  const [initialNavigationState, setInitialNavigationState] = useState()
-  const [isRestoringNavigationState, setIsRestoringNavigationState] = useState(true)
-
-  const routeNameRef = useRef()
-  const onNavigationStateChange = (state) => {
-    const previousRouteName = routeNameRef.current
-    const currentRouteName = getActiveRouteName(state)
-
-    if (previousRouteName !== currentRouteName) {
-      // track screens.
-      __DEV__ && console.tron.log(currentRouteName)
-    }
-
-    // Save the current route name for later comparision
-    routeNameRef.current = currentRouteName
-
-    // Persist state to storage
-    storage.save(persistenceKey, state)
-  }
-
-  const restoreState = async () => {
-    try {
-      const state = await storage.load(persistenceKey)
-      if (state) setInitialNavigationState(state)
-    } finally {
-      setIsRestoringNavigationState(false)
-    }
-  }
-
-  useEffect(() => {
-    if (isRestoringNavigationState) restoreState()
-  }, [isRestoringNavigationState])
-
-  return { onNavigationStateChange, restoreState, initialNavigationState }
 }

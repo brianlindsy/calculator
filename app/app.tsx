@@ -21,7 +21,6 @@ import {
   RootNavigator,
   canExit,
   setRootNavigation,
-  useNavigationPersistence,
 } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
@@ -43,10 +42,6 @@ function App() {
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
-  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
-    storage,
-    NAVIGATION_PERSISTENCE_KEY,
-  )
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
@@ -69,8 +64,6 @@ function App() {
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <RootNavigator
             ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
           />
         </SafeAreaProvider>
       </RootStoreProvider>

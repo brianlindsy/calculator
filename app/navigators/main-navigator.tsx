@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { Calculator} from "../screens"
+import { Calculator, HistoryList} from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,9 +21,8 @@ import { Calculator} from "../screens"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
+  calculator: undefined
+  historyList: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -36,7 +35,8 @@ export function MainNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="welcome" component={Calculator} />
+      <Stack.Screen name="calculator" component={Calculator} />
+      <Stack.Screen name="historyList" component={HistoryList} />
     </Stack.Navigator>
   )
 }

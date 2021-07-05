@@ -1,10 +1,10 @@
 import React from "react"
-import { View,  ViewStyle, TouchableOpacity, Text} from "react-native"
+import { View,  ViewStyle, TouchableOpacity, Text, Image, StyleSheet} from "react-native"
 import { observer } from "mobx-react-lite"
 import { ButtonProps } from "./button-props"
 
 const FULL: ViewStyle = {
-    flex: 3,
+    flex: 2,
 }
 const ROW: ViewStyle = {
     flexDirection: "row",
@@ -12,24 +12,56 @@ const ROW: ViewStyle = {
 }
 const BUTTON: ViewStyle = {
     backgroundColor: "#DDDDDD",
-    padding: 10,
+    padding: 12.5,
     flexGrow:1
 }
 
+const DOUBLE_ZERO: ViewStyle = {
+    flexDirection: "row"
+}
+
+const styles = StyleSheet.create({
+    container: {
+        paddingTop: 50,
+    },
+    buttonNumber: {
+        flexGrow:1,
+        width: 50,
+        height: 50,
+        padding: 5
+    },
+    doubleZero: {
+        width: 25,
+        height: 25
+      },
+    dot: {
+        fontSize: 50
+    }
+  });
+
 export const CalculatorButtons = observer(function CalculatorButtons(props: ButtonProps) {
+    const isOperator = (keyType: string) => {
+        if(keyType === "/" || keyType === "*" || keyType === "+" || keyType === "-"){
+            return true;
+        }
+        return false;
+    }
 
     const handleOnPress = (keyType: string) => {
         if(!isNaN(Number(keyType))){
-            console.log('is a number')
-            props.inputDigit(keyType);
+            props.inputDigit(keyType)
+        } else if(isOperator(keyType)){
+            props.inputOperator(keyType)
         } else if (keyType === "C"){
-            props.clearAll();
+            props.clearAll()
         } else if (keyType === "."){
-            props.inputDot();
-        } else if (keyType === "%"){
-            props.inputPercent();
-        } else {
-            props.performOperation(keyType);
+            props.inputDot()
+        } else if(keyType === "="){
+            props.performOperation("=")
+        } else if(keyType === "%"){
+            props.inputPercent()
+        } else if(keyType === "(" || keyType === ")"){
+            props.inputParenthesis(keyType)
         }
     }
 
@@ -37,72 +69,78 @@ export const CalculatorButtons = observer(function CalculatorButtons(props: Butt
         <View style={FULL}>
             <View style={ROW}>
                 <TouchableOpacity key="clear" style={BUTTON} onPress={() => handleOnPress("C")}>
-                    <Text>C</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/AC.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity key="parenthesis" style={BUTTON}>
-                    <Text>()</Text>
+                <TouchableOpacity key="leftParenthesis" style={BUTTON} onPress={() => handleOnPress("(")}>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/left_paren.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity key="rightParenthesis" style={BUTTON} onPress={() => handleOnPress(")")}>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/right_paren.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="percent" style={BUTTON} onPress={() => handleOnPress("%")}>
-                    <Text>%</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/percent.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="divide" style={BUTTON} onPress={() => handleOnPress("/")}>
-                    <Text>/</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/divide.png')} />
                 </TouchableOpacity>
             </View>
             <View style={ROW}>
                 <TouchableOpacity key="seven" style={BUTTON} onPress={() => handleOnPress("7")}>
-                    <Text>7</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/seven.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="eight" style={BUTTON} onPress={() => handleOnPress("8")}>
-                    <Text>8</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/eight.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="nine" style={BUTTON} onPress={() => handleOnPress("9")}>
-                    <Text>9</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/nine.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="multiply" style={BUTTON} onPress={() => handleOnPress("*")}>
-                    <Text>X</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/multiply.png')} />
                 </TouchableOpacity>
             </View>
             <View style={ROW}>
                 <TouchableOpacity key="four" style={BUTTON} onPress={() => handleOnPress("4")}>
-                    <Text>4</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/four.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="five" style={BUTTON} onPress={() => handleOnPress("5")}>
-                    <Text>5</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/five.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="six" style={BUTTON} onPress={() => handleOnPress("6")}>
-                    <Text>6</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/six.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="minus" style={BUTTON} onPress={() => handleOnPress("-")}>
-                    <Text>-</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/subtract.png')} />
                 </TouchableOpacity>
             </View>
             <View style={ROW}>
                 <TouchableOpacity key="one" style={BUTTON} onPress={() => handleOnPress("1")}>
-                    <Text>1</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/one.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="two" style={BUTTON} onPress={() => handleOnPress("2")}>
-                    <Text>2</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/two.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="three" style={BUTTON} onPress={() => handleOnPress("3")}>
-                    <Text>3</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/three.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="add" style={BUTTON} onPress={() => handleOnPress("+")}>
-                    <Text>+</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/add.png')} />
                 </TouchableOpacity>
             </View>
             <View style={ROW}>
                 <TouchableOpacity key="doubleZero" style={BUTTON} onPress={() => handleOnPress("00")}>
-                    <Text>00</Text>
+                    <View style={DOUBLE_ZERO}>
+                        <Image style={styles.doubleZero} source={require('./buttonImages/zero.png')} />
+                        <Image style={styles.doubleZero} source={require('./buttonImages/zero.png')} />
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity key="zero" style={BUTTON} onPress={() => handleOnPress("0")}>
-                    <Text>0</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/zero.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity key="dot" style={BUTTON} onPress={() => handleOnPress(".")}>
-                    <Text>.</Text>
+                    <Text style={styles.dot}>.</Text>
                 </TouchableOpacity>
                 <TouchableOpacity key="equals" style={BUTTON} onPress={() => handleOnPress("=")}>
-                    <Text>=</Text>
+                    <Image style={styles.buttonNumber} source={require('./buttonImages/equals.png')} />
                 </TouchableOpacity>
             </View>
         </View>
