@@ -1,13 +1,13 @@
-import React from "react"
-import { View, ViewStyle} from "react-native"
-import { observer } from "mobx-react-lite"
-import {CalculatorButtons, CalculatorDisplay } from "../../components"
-import * as math from "mathjs";
+import React from 'react'
+import { StyleSheet, View, ViewStyle} from 'react-native'
+import { observer } from 'mobx-react-lite'
+import {CalculatorButtons, CalculatorDisplay } from '../../components'
+import * as math from 'mathjs';
 import { Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import 'react-native-get-random-values';
 import { v4 as uuid } from  'uuid'
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from '@react-navigation/native'
 import { FontAwesome } from '@expo/vector-icons';
 
 if (__DEV__ && false) {
@@ -18,7 +18,13 @@ const FULL: ViewStyle = {
   flex: 1
 }
 
-const CALCULATOR_HISTORY_KEY = "CALCULATOR_HISTORY"
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#DDDDDD',
+  }
+});
+
+const CALCULATOR_HISTORY_KEY = 'CALCULATOR_HISTORY'
 
 export const Calculator = observer(function Calculator() {
 
@@ -26,7 +32,7 @@ export const Calculator = observer(function Calculator() {
   const [currentNumber, setCurrentNumber] = React.useState('');
 
   const navigation = useNavigation()
-  const navigateToHistory = () => navigation.navigate("historyList")
+  const navigateToHistory = () => navigation.navigate('historyList')
 
   const storeData = async (value) => {
     const toStore = {
@@ -34,9 +40,9 @@ export const Calculator = observer(function Calculator() {
       expression: value
     }
     try {
-      await AsyncStorage.mergeItem(CALCULATOR_HISTORY_KEY + "-" + uuid(), JSON.stringify(toStore))
+      await AsyncStorage.mergeItem(CALCULATOR_HISTORY_KEY + '-' + uuid(), JSON.stringify(toStore))
     } catch (e) {
-      console.log("Error storing " + value + " " + e)
+      console.log('Error storing ' + value + ' ' + e)
     }
   }
 
@@ -45,7 +51,7 @@ export const Calculator = observer(function Calculator() {
   }
 
   const clearAll = () => {
-    console.log("Clear")
+    console.log('Clear')
     setDisplayExpression('')
     setCurrentNumber('')
   }
@@ -61,23 +67,14 @@ export const Calculator = observer(function Calculator() {
   };
 
   const clearLastChar = () => {
-    setDisplayExpression(displayExpression.substring(0, displayExpression.length - 1) || '');
-    setCurrentNumber(currentNumber.substring(0, currentNumber.length - 1) || '');
+    if(displayExpression && currentNumber){
+      setDisplayExpression(displayExpression.substring(0, displayExpression.length - 1) || '');
+      setCurrentNumber(currentNumber.substring(0, currentNumber.length - 1) || '');
+    }
   }
 
   const inputPercent = () => {
     inputDigit('%')
-    if(currentNumber === '0%' || currentNumber === '' || currentNumber === '%'){
-      setCurrentNumber('0')
-    }
-
-    const removedSign = currentNumber.replace('%', '')
-
-    const newValue = parseFloat(removedSign) / 100
-
-    displayExpression.replace(currentNumber, String(newValue))
-
-    setDisplayExpression(displayExpression)
   };
 
   const inputDot = () => {
@@ -87,17 +84,19 @@ export const Calculator = observer(function Calculator() {
   const inputDigit = (digit: string) => {
     const newValue = displayExpression === '' ? String(digit) : displayExpression + digit
     setDisplayExpression(newValue)
-    const newCurrent = currentNumber + digit
+    const newCurrent = currentNumber === '' ? String(digit) : currentNumber + digit
     setCurrentNumber(newCurrent)
   }
 
   const performOperation = (nextOperator: string) => {
     let newDisplayValue = ''
-    if(nextOperator === "="){
+    
+    if(nextOperator === '='){
+
       try {
-        newDisplayValue = math.evaluate(displayExpression)
+        newDisplayValue = String(math.evaluate(displayExpression))
       } catch(e){
-        console.log("Error")
+        console.log('Error')
         setDisplayExpression('')
         setCurrentNumber('')
       }
@@ -108,10 +107,10 @@ export const Calculator = observer(function Calculator() {
   }
 
   return (
-    <View testID="CalculatorScreen" style={FULL}>
-      <Appbar.Header>
-        <Appbar.Content title="Calculator" />
-        <Appbar.Action icon={() => <FontAwesome name="history" size={24} color="black" />} 
+    <View testID='CalculatorScreen' style={FULL}>
+      <Appbar.Header style={styles.header}>
+        <Appbar.Content title='Calculator' />
+        <Appbar.Action icon={() => <FontAwesome name='history' size={24} color='black' />} 
           onPress={navigateToHistory} />
       </Appbar.Header>
       <CalculatorDisplay displayValue={displayExpression} clearLastChar={clearLastChar}

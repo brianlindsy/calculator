@@ -1,7 +1,6 @@
 import * as React from "react"
 import { View, ViewStyle, ImageStyle, TextStyle } from "react-native"
 import { Text } from "../text/text"
-import { Icon } from "../icon/icon"
 import { spacing, typography } from "../../theme"
 
 const BULLET_ITEM: ViewStyle = {
@@ -34,7 +33,6 @@ export interface BulletItemProps {
 export function BulletItem(props: BulletItemProps) {
   return (
     <View style={BULLET_ITEM}>
-      <Icon icon="bullet" containerStyle={BULLET_CONTAINER} style={BULLET} />
       <Text style={BULLET_TEXT} text={props.text} />
     </View>
   )

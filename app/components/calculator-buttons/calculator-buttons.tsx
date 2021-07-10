@@ -10,6 +10,8 @@ const ROW: ViewStyle = {
     flexDirection: "row",
     height: "20%"
 }
+
+
 const BUTTON: ViewStyle = {
     backgroundColor: "#DDDDDD",
     padding: 12.5,
@@ -27,8 +29,7 @@ const styles = StyleSheet.create({
     buttonNumber: {
         flexGrow:1,
         width: 50,
-        height: 50,
-        padding: 5
+        height: 50
     },
     doubleZero: {
         width: 25,
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
 
 export const CalculatorButtons = observer(function CalculatorButtons(props: ButtonProps) {
     const isOperator = (keyType: string) => {
-        if(keyType === "/" || keyType === "*" || keyType === "+" || keyType === "-"){
+        if(keyType === "/" || keyType === "x" || keyType === "+" || keyType === "-"){
             return true;
         }
         return false;
@@ -94,7 +95,7 @@ export const CalculatorButtons = observer(function CalculatorButtons(props: Butt
                 <TouchableOpacity key="nine" style={BUTTON} onPress={() => handleOnPress("9")}>
                     <Image style={styles.buttonNumber} source={require('./buttonImages/nine.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity key="multiply" style={BUTTON} onPress={() => handleOnPress("*")}>
+                <TouchableOpacity key="multiply" style={BUTTON} onPress={() => handleOnPress("x")}>
                     <Image style={styles.buttonNumber} source={require('./buttonImages/multiply.png')} />
                 </TouchableOpacity>
             </View>

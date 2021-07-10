@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   backspace: {
-    fontSize: 25
+    fontSize: 24
   }
 });
 
